@@ -7,6 +7,7 @@ import UpskillingZone from "@/pages/upskillingzone/UpskillingZone";
 import Reports from "@/pages/reports/Reports";
 import ResumeUpdates from "@/pages/resumeUpdates/ResumeUpdates";
 import Evaluation from "@/pages/evaluation/Evaluation";
+import UpskillingExperience from "@/pages/upskillingExperience/UpskillingExperience";
 
 
 
@@ -42,6 +43,7 @@ export default function AppRouter() {
               <Route path="/reports" element={<Reports />} />
               <Route path="/resume-update" element={<ResumeUpdates />} />
               <Route path="/evaluation/:jobId" element={<Evaluation />} />
+              <Route path="/upskilling-experience/:skillId" element={<UpskillingExperience />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/help" element={<HelpCenter />} />
               <Route path="/logout" element={<LogoutPage />} />

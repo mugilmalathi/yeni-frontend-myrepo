@@ -27,18 +27,19 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static top-0 left-0 h-full bg-white border-r flex flex-col transform transition-transform duration-300 z-40
-        w-64 ${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
+        className={`fixed lg:static top-0 left-0 h-full bg-white border-r flex flex-col transform transition-transform duration-300 z-40 w-64 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
       >
         {/* Logo */}
-        <div className="p-4 font-bold text-xl text-black">
+        <div className="p-4 font-bold text-lg sm:text-xl text-black">
           <span className="text-red-600">YENI</span> Ai
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-2 py-4 overflow-y-auto">
+        <nav className="flex-1 px-2 py-4 overflow-y-auto scrollbar-thin">
           {/* Main Nav */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <NavItem icon={<Home />} label="Dashboard" href="/dashboard" />
             <NavItem icon={<BarChart3 />} label="Practice Zone" href="/practice" />
             <NavItem icon={<LineChart />} label="Upskilling Mode" href="/upskilling" />
@@ -47,15 +48,15 @@ export default function Sidebar() {
           </div>
 
           {/* Divider */}
-          <div className="border-t-2 border-blue-500 my-6"></div>
+          <div className="border-t-2 border-blue-500 my-4 sm:my-6"></div>
 
           {/* Section Title */}
-          <p className="px-2 text-xs font-semibold text-gray-500 uppercase mb-2">
+          <p className="px-2 text-xs font-semibold text-gray-500 uppercase mb-2 sm:mb-3">
             Settings
           </p>
 
           {/* Extra Nav */}
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <NavItem icon={<Settings />} label="Settings" href="/settings" />
             <NavItem icon={<HelpCircle />} label="Help Center" href="/help" />
             <NavItem icon={<LogOut />} label="Log Out" href="/logout" />
@@ -63,18 +64,26 @@ export default function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t flex items-center space-x-3">
+        <div className="p-3 sm:p-4 border-t flex items-center space-x-3">
           <img
             src="https://avatar.iran.liara.run/public/62"
             alt="Profile"
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover flex-shrink-0"
           />
-          <div className="hidden sm:block">
-            <p className="text-sm font-medium text-black">Pankaj</p>
-            <p className="text-xs text-gray-500">pankajkumar@gmail.com</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs sm:text-sm font-medium text-black truncate">Pankaj</p>
+            <p className="text-xs text-gray-500 truncate">pankajkumar@gmail.com</p>
           </div>
         </div>
       </aside>
+
+      {/* Mobile Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
     </>
   );
 }
