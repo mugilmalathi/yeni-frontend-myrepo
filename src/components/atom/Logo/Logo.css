@@ -1,0 +1,11 @@
+.logo {
+  @apply flex items-center font-bold text-xl;
+}
+
+.logo__text {
+  @apply text-gray-900;
+}
+
+.logo__accent {
+  @apply text-red-500 ml-1;
+}
