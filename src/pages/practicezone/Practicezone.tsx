@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
 
 const jobs = [
   {
@@ -27,12 +26,6 @@ const jobs = [
 ]
 
 export default function PracticeZone() {
-  const navigate = useNavigate();
-
-  const handleStartEvaluation = (jobId: number) => {
-    navigate(`/evaluation/${jobId}`);
-  };
-
   return (
     <div className="space-y-6">
       {/* Banner */}
@@ -64,12 +57,7 @@ export default function PracticeZone() {
             </CardContent>
 
             {/* Right side */}
-            <Button 
-              className="rounded-full px-6"
-              onClick={() => handleStartEvaluation(job.id)}
-            >
-              Start Evaluation
-            </Button>
+            <Button className="rounded-full px-6">Start Evaluation</Button>
           </Card>
         ))}
       </div>

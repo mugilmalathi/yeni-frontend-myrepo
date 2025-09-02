@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 export default function Upskilling() {
-  const navigate = useNavigate();
-
   const skills = [
     {
       id: 1,
@@ -25,16 +22,12 @@ export default function Upskilling() {
     },
   ];
 
-  const handleStartExperience = (skillId: number) => {
-    navigate(`/upskilling-experience/${skillId}`);
-  };
-
   return (
-    <div className="flex flex-col gap-4 sm:gap-6 w-full">
+    <div className="flex flex-col gap-6 w-full">
       {/* Banner */}
-      <div className="bg-blue-600 text-white rounded-xl shadow p-4 sm:p-6">
-        <h2 className="text-xl sm:text-2xl font-bold">Yeni AI Upskilling Hub</h2>
-        <p className="text-sm sm:text-base mt-2">
+      <div className="bg-blue-600 text-white rounded-xl shadow p-6">
+        <h2 className="text-2xl font-bold">Yeni AI Upskilling Hub</h2>
+        <p className="text-sm mt-2">
           Welcome to the Upskilling Hub. Choose a skill to master or continue
           where you left off
         </p>
@@ -45,26 +38,23 @@ export default function Upskilling() {
         {skills.map((skill) => (
           <div
             key={skill.id}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-white rounded-xl shadow hover:shadow-md transition"
+            className="flex items-center gap-6 p-4 bg-white rounded-xl shadow hover:shadow-md transition"
           >
             {/* Image */}
             <img
               src={skill.img}
               alt={skill.title}
-              className="w-full sm:w-40 h-32 sm:h-24 object-cover rounded-lg flex-shrink-0"
+              className="w-40 h-24 object-cover rounded-lg"
             />
 
             {/* Text */}
             <div className="flex-1">
-              <h3 className="text-base sm:text-lg font-semibold">{skill.title}</h3>
-              <p className="text-gray-600 text-sm sm:text-base mt-1">{skill.desc}</p>
+              <h3 className="text-lg font-semibold">{skill.title}</h3>
+              <p className="text-gray-600 text-sm mt-1">{skill.desc}</p>
             </div>
 
             {/* Button */}
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 sm:px-5 py-2 text-sm sm:text-base w-full sm:w-auto"
-              onClick={() => handleStartExperience(skill.id)}
-            >
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5">
               Start Experience
             </Button>
           </div>
