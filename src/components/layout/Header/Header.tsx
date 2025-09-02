@@ -14,6 +14,8 @@ export default function Header() {
   "/settings": "Settings",
   "/help": "Help Center",
   "/logout": "Logout",
+  "/upskilling-experience": "Dashboard",
+  "/evaluation": "Dashboard",
 }
 
 
@@ -21,15 +23,15 @@ export default function Header() {
 const title = routeTitles[location.pathname] || "Dashboard"
 
   return (
-    <header className="flex items-center justify-between px-4 py-3 border-b bg-white">
+    <header className="flex items-center justify-between px-3 sm:px-4 py-3 border-b bg-white">
       {/* Dynamic Title */}
-      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">
+      <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold truncate">
         {title}
       </h1>
 
       {/* Right section */}
-      <div className="flex items-center gap-3 sm:gap-4">
-        <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500 cursor-pointer" />
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+        <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500 cursor-pointer hover:text-gray-700 transition-colors" />
         {/* Profile avatar (optional) */}
         {/* 
         <img
