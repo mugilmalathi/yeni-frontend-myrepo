@@ -39,6 +39,8 @@ function LogoutPage() {
 }
 
 export default function AppRouter() {
+  const isStudentDashboard = location.pathname.startsWith('/studentDashboard');
+
   return (
     <BrowserRouter>
       <Routes>
