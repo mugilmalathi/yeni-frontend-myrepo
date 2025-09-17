@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Evaluation() {
+  
+  const navigate = useNavigate();
+  const { jobId = "1" } = useParams();
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header Section */}
@@ -64,7 +69,10 @@ export default function Evaluation() {
 
       {/* Start Evaluation Button */}
       <div className="pt-4">
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium">
+        <Button 
+          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium"
+          onClick={() => navigate(`/evaluation/${jobId}/ai`)}
+          >
           Start Evaluation
         </Button>
       </div>

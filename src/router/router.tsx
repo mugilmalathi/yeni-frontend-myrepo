@@ -21,26 +21,18 @@ import StudentResume from "@/pages/auth/StudentResume";
 import CollegeRegister from "@/pages/auth/CollegeRegister";
 import Login from "@/pages/auth/Login";
 import PersonalisationPage from "@/pages/auth/PersonalisationPage.tsx";
-
-
-
-// Placeholder pages until you create them
-
-
-
-function SettingsPage() {
-  return <h1>Settings Page</h1>;
-}
-function HelpCenter() {
-  return <h1>Help Center Page</h1>;
-}
-function LogoutPage() {
-  return <h1>Logging out...</h1>;
-}
+import CollegeDetails from "@/pages/auth/CollegeDetails.tsx";
+import AccountSetup from "@/pages/auth/AccountSetup.tsx";
+import CollegePersonalisationPage from "@/pages/auth/CollegePersonalisationPage.tsx";
+import ResumeBuilder from "@/pages/auth/ResumeBuilder.tsx";
+import StudentSuccess from "@/pages/studentDashboard/StudentSuccess";
+import SettingsPage from "@/pages/studentDashboard/Settings";
+import HelpCenter from "@/pages/studentDashboard/HelpCenter";
+import LogoutPage from "@/pages/studentDashboard/Logout";
+import AIInterface from "@/pages/evaluation/AIInterface";
+import UpskillingAI from "@/pages/upskillingExperience/UpskillingAI";
 
 export default function AppRouter() {
-  const isStudentDashboard = location.pathname.startsWith('/studentDashboard');
-
   return (
     <BrowserRouter>
       <Routes>
@@ -49,8 +41,12 @@ export default function AppRouter() {
         <Route path="/register/student" element={<StudentRegister />} />
         <Route path="/register/student/education" element={<StudentEducation />} />
         <Route path="/register/student/resume" element={<StudentResume />} />
+        <Route path="/resume-builder" element={<ResumeBuilder />} />
         <Route path="/register/college" element={<CollegeRegister />} />
+        <Route path="/register/college/details" element={<CollegeDetails />} />
+        <Route path="/register/college/account" element={<AccountSetup />} />
         <Route path="/register/student/personalisation" element={<PersonalisationPage />} />
+        <Route path="/register/college/personalisation" element={<CollegePersonalisationPage />} />
         <Route path="/login" element={<Login />} />
 
         {/* Student Dashboard Routes */}
@@ -61,11 +57,13 @@ export default function AppRouter() {
               <StudentHeader />
               <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
                 <Routes>
-                  <Route path="/" element={<StudentDashboard />} />
-                  <Route path="/add-student" element={<AddStudent />} />
-                  <Route path="/add-job" element={<AddNewJob />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="/help" element={<HelpCenter />} />
+                  <Route index element={<StudentDashboard />} />
+                  <Route path="add-student" element={<AddStudent />} />
+                  <Route path="add-job" element={<AddNewJob />} />
+                  <Route path="students/success" element={<StudentSuccess />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="help" element={<HelpCenter />} />
+                  <Route path="logout" element={<LogoutPage />} />
                 </Routes>
               </main>
             </div>
@@ -129,28 +127,64 @@ export default function AppRouter() {
             </div>
           </div>
         } />
-        <Route path="/evaluation/:jobId" element={
-          <div className="flex h-screen w-screen overflow-hidden">
-            <Sidebar />
-            <div className="flex flex-col flex-1 w-full">
-              <Header />
-              <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
-                <Evaluation />
-              </main>
+        <Route
+          path="/evaluation/:jobId"
+          element={
+            <div className="flex h-screen w-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <Evaluation />
+                </main>
+              </div>
             </div>
-          </div>
-        } />
-        <Route path="/upskilling-experience/:skillId" element={
-          <div className="flex h-screen w-screen overflow-hidden">
-            <Sidebar />
-            <div className="flex flex-col flex-1 w-full">
-              <Header />
-              <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
-                <UpskillingExperience />
-              </main>
+          }
+        />
+
+        <Route
+          path="/evaluation/:jobId/ai"
+          element={
+            <div className="flex h-screen w-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <AIInterface />
+                </main>
+              </div>
             </div>
-          </div>
-        } />
+          }
+        />
+        <Route
+          path="/upskilling-experience/:skillId"
+          element={
+            <div className="flex h-screen w-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <UpskillingExperience />
+                </main>
+              </div>
+            </div>
+          }
+        />
+
+        <Route
+          path="/upskilling-experience/:skillId/ai"
+          element={
+            <div className="flex h-screen w-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <UpskillingAI />
+                </main>
+              </div>
+            </div>
+          }
+        />
         <Route path="/settings" element={
           <div className="flex h-screen w-screen overflow-hidden">
             <Sidebar />
@@ -178,4 +212,3 @@ export default function AppRouter() {
     </BrowserRouter>
   );
 }
-
