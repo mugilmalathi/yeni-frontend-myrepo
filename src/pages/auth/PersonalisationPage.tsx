@@ -1,4 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import HttpClient from "@/utils/httpClient";
+import { API_BASE_URL } from "@/utils/constants";
+import { cookieStore, REGISTRATION_ID_KEY } from "@/lib/utils";
 
 export default function PersonalisationPage() {
     const navigate = useNavigate();
@@ -63,10 +66,24 @@ export default function PersonalisationPage() {
                             personalised dashboard for you.
                         </p>
                         <button
-                            onClick={() => navigate("/dashboard")}
+                            onClick={async () => {
+                                const registrationId = cookieStore.get(REGISTRATION_ID_KEY);
+                                if (!registrationId) {
+                                    navigate('/login');
+                                    return;
+                                }
+                                try {
+                                    const http = new HttpClient({ baseURL: API_BASE_URL });
+                                    await http.post(`/students/register/${registrationId}/finalize`, { acceptTerms: true });
+                                } catch {}
+                                finally {
+                                    cookieStore.remove(REGISTRATION_ID_KEY);
+                                }
+                                navigate('/login');
+                            }}
                             className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
                         >
-                            Open Dashboard
+                            Continue
                         </button>
                     </div>
                 </div>

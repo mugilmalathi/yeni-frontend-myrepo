@@ -3,97 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import HttpClient from "@/utils/httpClient";
+import { API_BASE_URL } from "@/utils/constants";
+import { cookieStore, AUTH_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/lib/utils";
 
-type Profile = {
-  email: string;
-  password: string;
-  role: "student" | "college";
-  raw?: any;
-};
-
-function collectProfilesFromLocalStorage(): Profile[] {
-  const profiles: Profile[] = [];
-
-  // 1) Student step1
-  const s1 = localStorage.getItem("studentRegistrationStep1");
-  if (s1) {
-    try {
-      const obj = JSON.parse(s1);
-      if (obj?.emailId && obj?.password) {
-        profiles.push({
-          email: String(obj.emailId).toLowerCase().trim(),
-          password: String(obj.password),
-          role: "student",
-          raw: obj,
-        });
-      }
-    } catch {}
-  }
-
-  // 2) College step1 (if you save it like this)
-  const c1 = localStorage.getItem("collegeRegistrationStep1");
-  if (c1) {
-    try {
-      const obj = JSON.parse(c1);
-      if (obj?.officialEmailId && obj?.password) {
-        profiles.push({
-          email: String(obj.officialEmailId).toLowerCase().trim(),
-          password: String(obj.password),
-          role: "college",
-          raw: obj,
-        });
-      }
-    } catch {}
-  }
-
-  // 3) userRegistration (may or may not hold credentials)
-  const ur = localStorage.getItem("userRegistration");
-  if (ur) {
-    try {
-      const obj = JSON.parse(ur);
-      const candidateEmail =
-          obj?.officialEmailId ?? obj?.emailId ?? obj?.email ?? "";
-      if (candidateEmail && obj?.password) {
-        const role =
-            obj?.registrationType === "college" ? "college" : "student";
-        profiles.push({
-          email: String(candidateEmail).toLowerCase().trim(),
-          password: String(obj.password),
-          role,
-          raw: obj,
-        });
-      }
-    } catch {}
-  }
-
-  // 4) Any user_* entries (e.g., user_mugil@gmail.com)
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i) || "";
-    if (key.startsWith("user_")) {
-      try {
-        const obj = JSON.parse(localStorage.getItem(key) as string);
-        if (obj?.email && obj?.password) {
-          profiles.push({
-            email: String(obj.email).toLowerCase().trim(),
-            password: String(obj.password),
-            // If you ever store a registrationType here, we’ll respect it; else assume student
-            role:
-                obj?.registrationType === "college" ? "college" : "student",
-            raw: obj,
-          });
-        }
-      } catch {}
-    }
-  }
-
-  // Deduplicate by email (keep first entry)
-  const seen = new Set<string>();
-  return profiles.filter((p) => {
-    if (seen.has(p.email)) return false;
-    seen.add(p.email);
-    return true;
-  });
-}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -105,8 +18,11 @@ export default function Login() {
     setError("");
   };
 
-  const handleLogin = () => {
-    const email = formData.email.trim().toLowerCase();
+  const [submitting, setSubmitting] = useState(false);
+  const http = new HttpClient({ baseURL: API_BASE_URL });
+
+  const handleLogin = async () => {
+    const email = formData.email.trim();
     const password = formData.password.trim();
 
     if (!email || !password) {
@@ -114,31 +30,21 @@ export default function Login() {
       return;
     }
 
-    const profiles = collectProfilesFromLocalStorage();
-
-    if (!profiles.length) {
-      setError("No user found. Please register first.");
-      return;
+    setSubmitting(true);
+    try {
+      const res = await http.post<{ token: string; refreshToken: string; user: { role: string } }>(
+          "/auth/login",
+          { email, password }
+      );
+      cookieStore.set(AUTH_TOKEN_KEY, res.token, 7);
+      cookieStore.set(REFRESH_TOKEN_KEY, res.refreshToken, 14);
+      const role = res.user?.role || 'student';
+      navigate(role === 'student' ? '/dashboard' : '/studentDashboard');
+    } catch (e: any) {
+      setError(e?.message || 'Login failed');
+    } finally {
+      setSubmitting(false);
     }
-
-    const match = profiles.find(
-        (p) => p.email === email && p.password === password
-    );
-
-    if (!match) {
-      setError("Invalid email or password");
-      return;
-    }
-
-    // Persist session info (also keep compatibility with your existing keys)
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userType", match.role);
-
-    // If you want to keep the original "currentUser" semantics, store the matched raw data:
-    localStorage.setItem("currentUser", JSON.stringify(match.raw || match));
-
-    // Navigate by role
-    navigate(match.role === "student" ? "/dashboard" : "/studentDashboard");
   };
 
   const handleForgotPassword = () => {
@@ -222,9 +128,10 @@ export default function Login() {
 
                   <Button
                       onClick={handleLogin}
+                      disabled={submitting}
                       className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3"
                   >
-                    Login
+                    {submitting ? 'Signing in...' : 'Login'}
                   </Button>
 
                   <div className="text-center">

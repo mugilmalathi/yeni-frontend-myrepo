@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User, Mail, Lock, Phone } from "lucide-react";
+import HttpClient from "@/utils/httpClient";
+import { API_BASE_URL } from "@/utils/constants";
+import { cookieStore, REGISTRATION_ID_KEY } from "@/lib/utils";
 
 export default function StudentRegister() {
   const navigate = useNavigate();
@@ -53,15 +56,43 @@ export default function StudentRegister() {
     return newErrors;
   };
 
-  const handleNext = () => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const http = new HttpClient({ baseURL: API_BASE_URL });
+
+  const handleNext = async () => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    localStorage.setItem('studentRegistrationStep1', JSON.stringify(formData));
-    navigate('/register/student/education');
+    setSubmitting(true);
+    try {
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        collegeName: formData.name,
+        department: formData.department,
+        emailId: formData.emailId,
+        phoneNo: formData.phoneNo,
+        password: formData.password,
+      };
+      const res = await http.post<{ registrationId: string; nextStep: string }>(
+        "/students/register/step1",
+        payload
+      );
+      if (res?.registrationId) {
+        cookieStore.set(REGISTRATION_ID_KEY, res.registrationId, 3);
+        navigate("/register/student/education");
+      } else {
+        setErrors({ general: "Unexpected response. Please try again." });
+      }
+    } catch (e: any) {
+      setErrors({ general: e?.message || "Registration failed" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -227,12 +258,18 @@ export default function StudentRegister() {
                 </div>
               </div>
 
+              {/* Error */}
+              {errors.general && (
+                <p className="text-red-500 text-sm">{errors.general}</p>
+              )}
+
               {/* Next Button */}
               <Button
                 onClick={handleNext}
+                disabled={submitting}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 mt-6"
               >
-                Next
+                {submitting ? "Submitting..." : "Next"}
               </Button>
 
               {/* Terms */}

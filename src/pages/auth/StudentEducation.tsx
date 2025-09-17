@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Calendar } from "lucide-react";
+import HttpClient from "@/utils/httpClient";
+import { API_BASE_URL } from "@/utils/constants";
+import { cookieStore, REGISTRATION_ID_KEY } from "@/lib/utils";
 
 export default function StudentEducation() {
   const navigate = useNavigate();
@@ -26,14 +29,31 @@ export default function StudentEducation() {
     return newErrors;
   };
 
-  const handleNext = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const http = new HttpClient({ baseURL: API_BASE_URL });
+
+  const handleNext = async () => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    localStorage.setItem("studentRegistrationStep2", JSON.stringify(formData));
-    navigate("/register/student/resume");
+
+    const registrationId = cookieStore.get(REGISTRATION_ID_KEY);
+    if (!registrationId) {
+      setErrors({ general: "Missing registration ID. Please restart registration." });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await http.put(`/students/register/${registrationId}/education`, formData);
+      navigate("/register/student/resume");
+    } catch (e: any) {
+      setErrors({ general: e?.message || "Failed to save education" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -142,12 +162,18 @@ export default function StudentEducation() {
                   </div>
                 </div>
 
-                {/* Next Button */}
+              {/* Error */}
+              {errors.general && (
+                <p className="text-red-500 text-sm">{errors.general}</p>
+              )}
+
+              {/* Next Button */}
                 <Button
                     onClick={handleNext}
+                    disabled={submitting}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 mt-8"
                 >
-                  Next
+                  {submitting ? "Submitting..." : "Next"}
                 </Button>
 
                 {/* Terms */}

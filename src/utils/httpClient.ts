@@ -1,16 +1,19 @@
 interface HttpClientConfig {
   baseURL: string;
   headers?: Record<string, string>;
+  getAuthToken?: () => string | undefined;
 }
 
 class HttpClient {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
+  private getAuthToken?: () => string | undefined;
 
   constructor(config: HttpClientConfig) {
     this.baseURL = config.baseURL;
+    this.getAuthToken = config.getAuthToken;
     this.defaultHeaders = {
-      'Content-Type': 'application/json',
+      'Accept': 'application/json',
       ...config.headers
     };
   }
@@ -20,22 +23,35 @@ class HttpClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
+
+    const headers: Record<string, string> = {
+      ...this.defaultHeaders,
+      ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+      ...(options.headers as any)
+    };
+
+    const token = this.getAuthToken?.();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const config: RequestInit = {
       ...options,
-      headers: {
-        ...this.defaultHeaders,
-        ...options.headers
-      }
+      headers
     };
 
     try {
       const response = await fetch(url, config);
-      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text().catch(() => '');
+        throw new Error(errorText || `HTTP error! status: ${response.status}`);
       }
-      
-      return await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        return await response.json();
+      }
+      // @ts-ignore
+      return (await response.text()) as unknown as T;
     } catch (error) {
       console.error('API request failed:', error);
       throw error;
@@ -47,16 +63,18 @@ class HttpClient {
   }
 
   post<T>(endpoint: string, data: any): Promise<T> {
+    const body = data instanceof FormData ? data : JSON.stringify(data);
     return this.request<T>(endpoint, {
       method: 'POST',
-      body: JSON.stringify(data)
+      body
     });
   }
 
   put<T>(endpoint: string, data: any): Promise<T> {
+    const body = data instanceof FormData ? data : JSON.stringify(data);
     return this.request<T>(endpoint, {
       method: 'PUT',
-      body: JSON.stringify(data)
+      body
     });
   }
 

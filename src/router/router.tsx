@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import LandingPage from "@/pages/Home/LandingPage";
 import Header from "@/components/layout/Header/Header";
@@ -31,6 +31,15 @@ import HelpCenter from "@/pages/studentDashboard/HelpCenter";
 import LogoutPage from "@/pages/studentDashboard/Logout";
 import AIInterface from "@/pages/evaluation/AIInterface";
 import UpskillingAI from "@/pages/upskillingExperience/UpskillingAI";
+import { cookieStore, AUTH_TOKEN_KEY } from "@/lib/utils";
+
+function Protected({ children }: { children: JSX.Element }) {
+  const token = cookieStore.get(AUTH_TOKEN_KEY);
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
 
 export default function AppRouter() {
   return (
@@ -51,37 +60,41 @@ export default function AppRouter() {
 
         {/* Student Dashboard Routes */}
         <Route path="/studentDashboard/*" element={
-          <div className="flex h-screen w-screen overflow-hidden">
-            <StudentSidebar />
-            <div className="flex flex-col flex-1 w-full">
-              <StudentHeader />
-              <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
-                <Routes>
-                  <Route index element={<StudentDashboard />} />
-                  <Route path="add-student" element={<AddStudent />} />
-                  <Route path="add-job" element={<AddNewJob />} />
-                  <Route path="students/success" element={<StudentSuccess />} />
-                  <Route path="settings" element={<SettingsPage />} />
-                  <Route path="help" element={<HelpCenter />} />
-                  <Route path="logout" element={<LogoutPage />} />
-                </Routes>
-              </main>
+          <Protected>
+            <div className="flex h-screen w-screen overflow-hidden">
+              <StudentSidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <StudentHeader />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <Routes>
+                    <Route index element={<StudentDashboard />} />
+                    <Route path="add-student" element={<AddStudent />} />
+                    <Route path="add-job" element={<AddNewJob />} />
+                    <Route path="students/success" element={<StudentSuccess />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                    <Route path="help" element={<HelpCenter />} />
+                    <Route path="logout" element={<LogoutPage />} />
+                  </Routes>
+                </main>
+              </div>
             </div>
-          </div>
+          </Protected>
         } />
 
         {/* Regular Dashboard Routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={
-          <div className="flex h-screen w-screen overflow-hidden">
-            <Sidebar />
-            <div className="flex flex-col flex-1 w-full">
-              <Header />
-              <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
-                <Dashboard />
-              </main>
+          <Protected>
+            <div className="flex h-screen w-screen overflow-hidden">
+              <Sidebar />
+              <div className="flex flex-col flex-1 w-full">
+                <Header />
+                <main className="flex-1 w-full p-4 overflow-y-auto bg-gray-50">
+                  <Dashboard />
+                </main>
+              </div>
             </div>
-          </div>
+          </Protected>
         } />
         <Route path="/practice" element={
           <div className="flex h-screen w-screen overflow-hidden">

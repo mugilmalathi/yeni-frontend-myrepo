@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Upload, FileText, Plus } from "lucide-react";
+import HttpClient from "@/utils/httpClient";
+import { API_BASE_URL } from "@/utils/constants";
+import { cookieStore, REGISTRATION_ID_KEY } from "@/lib/utils";
 
 export default function StudentResume() {
   const navigate = useNavigate();
@@ -27,30 +30,25 @@ export default function StudentResume() {
     }
   };
 
-  const handleUploadFiles = async () => {
-    setIsUploading(true);
-    
-    // Simulate upload process
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Complete registration
-    const step1Data = JSON.parse(localStorage.getItem('studentRegistrationStep1') || '{}');
-    const step2Data = JSON.parse(localStorage.getItem('studentRegistrationStep2') || '{}');
-    
-    const completeRegistration = {
-      ...step1Data,
-      ...step2Data,
-      files: uploadedFiles.map(f => f.name),
-      registrationType: 'student',
-      registrationDate: new Date().toISOString()
-    };
+  const http = new HttpClient({ baseURL: API_BASE_URL });
 
-    localStorage.setItem('userRegistration', JSON.stringify(completeRegistration));
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userType', 'student');
-    
-    setIsUploading(false);
-    navigate('/register/student/personalisation');
+  const handleUploadFiles = async () => {
+    const registrationId = cookieStore.get(REGISTRATION_ID_KEY);
+    if (!registrationId) {
+      alert("Missing registration ID. Please restart registration.");
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      uploadedFiles.forEach((f) => formData.append('files', f));
+      await http.post(`/students/register/${registrationId}/resume/files`, formData);
+      navigate('/register/student/personalisation');
+    } catch (e: any) {
+      alert(e?.message || 'Upload failed');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleCreateResume = () => {
