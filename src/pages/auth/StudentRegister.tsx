@@ -96,30 +96,30 @@ export default function StudentRegister() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 z-10 w-full">
+    <div className="h-screen flex flex-col overflow-hidden">
+      {/* Header - Fixed */}
+      <header className="bg-white shadow flex items-center justify-between px-3 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 z-10 w-full flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="font-bold text-lg sm:text-xl text-black">
+          <div className="font-bold text-base sm:text-lg md:text-xl text-black">
             <span className="text-red-600">YENI</span> Ai
           </div>
         </div>
-        <nav className="hidden md:flex gap-4 lg:gap-8 text-gray-700 font-medium text-sm lg:text-base">
+        <nav className="hidden sm:flex gap-2 md:gap-4 lg:gap-8 text-gray-700 font-medium text-xs sm:text-sm md:text-base">
           <a href="#" className="hover:text-red-500">Home</a>
           <a href="#" className="hover:text-red-500">About Us</a>
           <a href="#" className="hover:text-red-500">Our Programs</a>
           <a href="#" className="hover:text-red-500">Blogs</a>
           <a href="#" className="hover:text-red-500">Contact Us</a>
         </nav>
-        <button className="bg-red-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-red-600 text-sm lg:text-base">
+        <button className="bg-red-500 text-white px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 text-xs sm:text-sm md:text-base">
           Enquire Today
         </button>
       </header>
 
-      {/* Body */}
-      <div className="flex flex-1">
-        {/* Left Image */}
-        <div className="w-1/3 hidden lg:block">
+      {/* Body - Fixed height with proper scrolling */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Image - 50% - Fixed, no scroll */}
+        <div className="w-1/2 hidden lg:block">
           <img
             src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
             alt="Professional woman"
@@ -127,31 +127,31 @@ export default function StudentRegister() {
           />
         </div>
 
-        {/* Right Form */}
-        <div className="w-full lg:w-2/3 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-4">
-          <div className="bg-white rounded-lg p-6 sm:p-8 lg:p-10 w-full max-w-4xl mx-4 shadow-lg">
+        {/* Right Form - 50% - Scrollable */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-3 sm:p-4 md:p-6 overflow-y-auto">
+          <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl mx-2 sm:mx-4 shadow-lg">
             {/* Title */}
-            <div className="text-center mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Tell Us About Yourself</h2>
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-600 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            <div className="text-center mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-2">Tell Us About Yourself</h2>
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-purple-600 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
                 </div>
-                <span className="text-base sm:text-lg font-medium text-gray-700">User Name</span>
+                <span className="text-sm sm:text-base md:text-lg font-medium text-gray-700">User Name</span>
               </div>
             </div>
 
             {/* Form */}
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4 md:space-y-6">
               {/* First Name & Last Name */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label className="text-sm text-gray-600">First Name</Label>
                   <Input
                     placeholder="First Name"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="mt-1"
+                    className="mt-1 text-sm sm:text-base"
                   />
                   {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
                 </div>
@@ -161,18 +161,18 @@ export default function StudentRegister() {
                     placeholder="Last Name"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="mt-1"
+                    className="mt-1 text-sm sm:text-base"
                   />
                   {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
                 </div>
               </div>
 
               {/* College Name & Department */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label className="text-sm text-gray-600">College/Institute/University</Label>
                   <Select onValueChange={(value) => handleInputChange('name', value)}>
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1 text-sm sm:text-base">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -190,14 +190,14 @@ export default function StudentRegister() {
                     placeholder="Design"
                     value={formData.department}
                     onChange={(e) => handleInputChange('department', e.target.value)}
-                    className="mt-1"
+                    className="mt-1 text-sm sm:text-base"
                   />
                   {errors.department && <p className="text-red-500 text-xs mt-1">{errors.department}</p>}
                 </div>
               </div>
 
               {/* Email & Phone */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label className="text-sm text-gray-600">Email ID</Label>
                   <div className="relative mt-1">
@@ -206,7 +206,7 @@ export default function StudentRegister() {
                       placeholder="name@student.bml.edu.in"
                       value={formData.emailId}
                       onChange={(e) => handleInputChange('emailId', e.target.value)}
-                      className="pl-10"
+                      className="pl-10 text-sm sm:text-base"
                     />
                   </div>
                   {errors.emailId && <p className="text-red-500 text-xs mt-1">{errors.emailId}</p>}
@@ -219,7 +219,7 @@ export default function StudentRegister() {
                       placeholder="+91 7070708541"
                       value={formData.phoneNo}
                       onChange={(e) => handleInputChange('phoneNo', e.target.value)}
-                      className="pl-10"
+                      className="pl-10 text-sm sm:text-base"
                     />
                   </div>
                   {errors.phoneNo && <p className="text-red-500 text-xs mt-1">{errors.phoneNo}</p>}
@@ -227,7 +227,7 @@ export default function StudentRegister() {
               </div>
 
               {/* Password & Confirm Password */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <Label className="text-sm text-gray-600">Password</Label>
                   <div className="relative mt-1">
@@ -237,7 +237,7 @@ export default function StudentRegister() {
                       placeholder="••••••••••"
                       value={formData.password}
                       onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="pl-10"
+                      className="pl-10 text-sm sm:text-base"
                     />
                   </div>
                   {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -251,7 +251,7 @@ export default function StudentRegister() {
                       placeholder="••••••••••"
                       value={formData.confirmPassword}
                       onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                      className="pl-10"
+                      className="pl-10 text-sm sm:text-base"
                     />
                   </div>
                   {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
@@ -267,7 +267,7 @@ export default function StudentRegister() {
               <Button
                 onClick={handleNext}
                 disabled={submitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 mt-6"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 mt-4 sm:mt-6 text-sm sm:text-base"
               >
                 {submitting ? "Submitting..." : "Next"}
               </Button>

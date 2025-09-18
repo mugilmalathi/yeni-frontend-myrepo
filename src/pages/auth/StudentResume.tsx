@@ -57,30 +57,30 @@ export default function StudentResume() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Header */}
-      <header className="bg-white shadow flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 z-10 w-full">
+    <div className="h-screen flex flex-col overflow-hidden">
+      {/* Header - Fixed */}
+      <header className="bg-white shadow flex items-center justify-between px-3 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 z-10 w-full flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="font-bold text-lg sm:text-xl text-black">
+          <div className="font-bold text-base sm:text-lg md:text-xl text-black">
             <span className="text-red-600">YENI</span> Ai
           </div>
         </div>
-        <nav className="hidden md:flex gap-4 lg:gap-8 text-gray-700 font-medium text-sm lg:text-base">
+        <nav className="hidden sm:flex gap-2 md:gap-4 lg:gap-8 text-gray-700 font-medium text-xs sm:text-sm md:text-base">
           <a href="#" className="hover:text-red-500">Home</a>
           <a href="#" className="hover:text-red-500">About Us</a>
           <a href="#" className="hover:text-red-500">Our Programs</a>
           <a href="#" className="hover:text-red-500">Blogs</a>
           <a href="#" className="hover:text-red-500">Contact Us</a>
         </nav>
-        <button className="bg-red-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-red-600 text-sm lg:text-base">
+        <button className="bg-red-500 text-white px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 text-xs sm:text-sm md:text-base">
           Enquire Today
         </button>
       </header>
 
-      {/* Background */}
-      <div className="flex-1 flex">
-        {/* Left side - Woman image */}
-        <div className="hidden lg:block lg:w-1/3">
+      {/* Background - Fixed height with proper scrolling */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left side - Woman image - 50% - Fixed, no scroll */}
+        <div className="w-1/2 hidden lg:block">
           <img
             src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
             alt="Professional woman"
@@ -88,12 +88,12 @@ export default function StudentResume() {
           />
         </div>
 
-        {/* Right side - Resume upload */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-4">
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 w-full max-w-6xl">
+        {/* Right side - Resume upload - 50% - Scrollable */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 p-3 sm:p-4 md:p-6 overflow-y-auto">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 w-full max-w-2xl sm:max-w-4xl lg:max-w-6xl">
             {/* Upload Section */}
-            <div className="bg-white rounded-lg p-6 sm:p-8 w-full lg:w-96 mx-auto lg:mx-0">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 text-center mb-6 sm:mb-8">Resume Upload</h2>
+            <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8 w-full lg:w-96 mx-auto lg:mx-0">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 text-center mb-4 sm:mb-6 md:mb-8">Resume Upload</h2>
 
               {/* Upload Area */}
               <div

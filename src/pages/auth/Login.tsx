@@ -41,7 +41,19 @@ export default function Login() {
       const role = res.user?.role || 'student';
       navigate(role === 'student' ? '/dashboard' : '/studentDashboard');
     } catch (e: any) {
-      setError(e?.message || 'Login failed');
+      console.error('Login error:', e);
+      // Handle different types of errors
+      if (e?.message?.includes('Invalid credentials')) {
+        setError('Invalid email or password. Please check your credentials and try again.');
+      } else if (e?.message?.includes('Network')) {
+        setError('Network error. Please check your connection and try again.');
+      } else if (e?.message?.includes('404')) {
+        setError('Service not found. Please try again later.');
+      } else if (e?.message?.includes('500')) {
+        setError('Server error. Please try again later.');
+      } else {
+        setError(e?.message || 'Login failed. Please try again.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -52,32 +64,31 @@ export default function Login() {
   };
 
   return (
-      <div className="min-h-screen flex flex-col">
-        {/* Header */}
-        <header className="bg-white shadow flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 z-10 w-full">
+      <div className="h-screen flex flex-col overflow-hidden">
+        {/* Header - Fixed */}
+        <header className="bg-white shadow flex items-center justify-between px-3 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 z-10 w-full flex-shrink-0">
           <div className="flex items-center gap-2">
-            <div className="font-bold text-lg sm:text-xl text-black">
+            <div className="font-bold text-base sm:text-lg md:text-xl text-black">
               <span className="text-red-600">YENI</span> Ai
             </div>
           </div>
-          <nav className="hidden md:flex gap-4 lg:gap-8 text-gray-700 font-medium text-sm lg:text-base">
+          <nav className="hidden sm:flex gap-2 md:gap-4 lg:gap-8 text-gray-700 font-medium text-xs sm:text-sm md:text-base">
             <a href="#" className="hover:text-red-500">Home</a>
             <a href="#" className="hover:text-red-500">About Us</a>
             <a href="#" className="hover:text-red-500">Our Programs</a>
             <a href="#" className="hover:text-red-500">Blogs</a>
             <a href="#" className="hover:text-red-500">Contact Us</a>
           </nav>
-          <button className="bg-red-500 text-white px-3 sm:px-4 py-2 rounded hover:bg-red-600 text-sm lg:text-base">
+          <button className="bg-red-500 text-white px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 text-xs sm:text-sm md:text-base">
             Enquire Today
           </button>
         </header>
 
-        {/* Content (fills remaining viewport height; zero white gap) */}
-        <main className="flex-1 bg-gradient-to-br from-gray-800 to-gray-900">
-          {/* Grid ensures full width/height; no absolute positioning */}
-          <div className="grid grid-cols-1 md:grid-cols-2 min-h-[calc(100vh-4rem)]">
-            {/* Left: image */}
-            <div className="hidden md:block">
+        {/* Content - Fixed height with proper scrolling */}
+        <main className="flex-1 bg-gradient-to-br from-gray-800 to-gray-900 overflow-hidden">
+          <div className="flex h-full">
+            {/* Left: image - Fixed, no scroll */}
+            <div className="hidden md:block w-1/2">
               <img
                   src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
                   alt="Professional team"
@@ -85,9 +96,9 @@ export default function Login() {
               />
             </div>
 
-            {/* Right: form */}
-            <div className="flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg p-6 sm:p-8 w-full max-w-md mx-auto shadow-xl">
+            {/* Right: form - Scrollable */}
+            <div className="w-full md:w-1/2 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
+              <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-auto shadow-xl">
                 <div className="text-center mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                     Login Details
@@ -100,8 +111,8 @@ export default function Login() {
                     </div>
                 )}
 
-                <div className="space-y-4 sm:space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-3 sm:space-y-4 md:space-y-6">
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
                       <Label className="text-sm text-gray-600">Email</Label>
                       <Input
@@ -109,7 +120,7 @@ export default function Login() {
                           placeholder="Email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
-                          className="mt-1"
+                          className="mt-1 text-sm sm:text-base"
                       />
                     </div>
                     <div>
@@ -121,7 +132,7 @@ export default function Login() {
                           onChange={(e) =>
                               handleInputChange("password", e.target.value)
                           }
-                          className="mt-1"
+                          className="mt-1 text-sm sm:text-base"
                       />
                     </div>
                   </div>
@@ -129,7 +140,7 @@ export default function Login() {
                   <Button
                       onClick={handleLogin}
                       disabled={submitting}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 text-sm sm:text-base"
                   >
                     {submitting ? 'Signing in...' : 'Login'}
                   </Button>
@@ -137,14 +148,14 @@ export default function Login() {
                   <div className="text-center">
                     <button
                         onClick={handleForgotPassword}
-                        className="text-blue-600 hover:underline text-sm"
+                        className="text-blue-600 hover:underline text-xs sm:text-sm"
                     >
                       Forget Password?
                     </button>
                   </div>
 
                   <div className="text-center">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-xs sm:text-sm text-gray-600">
                       Don't have an account?{" "}
                       <button
                           onClick={() => navigate("/register")}

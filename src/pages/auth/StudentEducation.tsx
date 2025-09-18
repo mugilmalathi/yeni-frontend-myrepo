@@ -57,30 +57,30 @@ export default function StudentEducation() {
   };
 
   return (
-      <div className="min-h-screen flex flex-col relative overflow-hidden">
-        {/* Header */}
-        <header className="bg-white shadow flex items-center justify-between px-16 py-4 z-10 w-full">
+      <div className="h-screen flex flex-col overflow-hidden">
+        {/* Header - Fixed */}
+        <header className="bg-white shadow flex items-center justify-between px-3 sm:px-6 md:px-8 lg:px-16 py-3 sm:py-4 z-10 w-full flex-shrink-0">
           <div className="flex items-center gap-2">
-            <div className="font-bold text-xl text-black">
+            <div className="font-bold text-base sm:text-lg md:text-xl text-black">
               <span className="text-red-600">YENI</span> Ai
             </div>
           </div>
-          <nav className="flex gap-8 text-gray-700 font-medium">
+          <nav className="hidden sm:flex gap-2 md:gap-4 lg:gap-8 text-gray-700 font-medium text-xs sm:text-sm md:text-base">
             <a href="#" className="hover:text-red-500">Home</a>
             <a href="#" className="hover:text-red-500">About Us</a>
             <a href="#" className="hover:text-red-500">Our Programs</a>
             <a href="#" className="hover:text-red-500">Blogs</a>
             <a href="#" className="hover:text-red-500">Contact Us</a>
           </nav>
-          <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+          <button className="bg-red-500 text-white px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 rounded hover:bg-red-600 text-xs sm:text-sm md:text-base">
             Enquire Today
           </button>
         </header>
 
-        {/* Background */}
-        <div className="flex-1 flex">
-          {/* Left Image */}
-          <div className="hidden md:block md:w-1/3">
+        {/* Background - Fixed height with proper scrolling */}
+        <div className="flex-1 flex overflow-hidden">
+          {/* Left Image - 50% - Fixed, no scroll */}
+          <div className="w-1/2 hidden lg:block">
             <img
                 src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
                 alt="Professional woman"
@@ -88,16 +88,16 @@ export default function StudentEducation() {
             />
           </div>
 
-          {/* Form */}
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-            <div className="bg-white rounded-lg p-8 w-full max-w-lg mx-4 shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          {/* Form - 50% - Scrollable */}
+          <div className="w-full lg:w-1/2 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 overflow-y-auto">
+            <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md md:max-w-lg mx-2 sm:mx-4 shadow-lg">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">
                 Tell Us About Your Education
               </h2>
 
               <div className="space-y-6">
                 {/* Degree & Specialization */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label htmlFor="degree" className="text-sm text-gray-600">
                       Degree / Course*
@@ -107,7 +107,7 @@ export default function StudentEducation() {
                         placeholder="Degree"
                         value={formData.degree}
                         onChange={(e) => handleInputChange("degree", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 text-sm sm:text-base"
                     />
                     {errors.degree && (
                         <p className="text-red-500 text-xs mt-1">{errors.degree}</p>
@@ -124,13 +124,13 @@ export default function StudentEducation() {
                         onChange={(e) =>
                             handleInputChange("specialization", e.target.value)
                         }
-                        className="mt-1"
+                        className="mt-1 text-sm sm:text-base"
                     />
                   </div>
                 </div>
 
                 {/* Year of Graduation & Details */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <Label htmlFor="graduation" className="text-sm text-gray-600">
                       Year of Graduation
@@ -144,7 +144,7 @@ export default function StudentEducation() {
                           onChange={(e) =>
                               handleInputChange("yearOfGraduation", e.target.value)
                           }
-                          className="pl-10"
+                          className="pl-10 text-sm sm:text-base"
                       />
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function StudentEducation() {
                         placeholder="Details"
                         value={formData.details}
                         onChange={(e) => handleInputChange("details", e.target.value)}
-                        className="mt-1"
+                        className="mt-1 text-sm sm:text-base"
                     />
                   </div>
                 </div>
@@ -171,7 +171,7 @@ export default function StudentEducation() {
                 <Button
                     onClick={handleNext}
                     disabled={submitting}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 mt-8"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 mt-6 sm:mt-8 text-sm sm:text-base"
                 >
                   {submitting ? "Submitting..." : "Next"}
                 </Button>
