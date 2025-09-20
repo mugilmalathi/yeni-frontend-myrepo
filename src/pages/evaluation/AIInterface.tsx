@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Mic, Video, ChevronLeft } from "lucide-react";
@@ -17,8 +17,12 @@ const JOBS: Record<string, JobMeta> = {
 
 export default function AIInterface() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { jobId = "1" } = useParams();
   const meta = JOBS[jobId] ?? JOBS["1"];
+  
+  // Get job role from navigation state
+  const jobRole = location.state?.jobRole || meta.title;
 
   return (
     <div className="space-y-4">
@@ -80,7 +84,7 @@ export default function AIInterface() {
         <div className="space-y-4">
           <div className="rounded-md bg-blue-600 p-4 text-white">
             <div className="text-base font-semibold">
-              {meta.title} – {meta.domain}
+              {jobRole} – {meta.domain}
             </div>
             <div className="mt-1 text-xs">
               Company: <span className="font-medium">{meta.company}</span>
@@ -91,8 +95,18 @@ export default function AIInterface() {
             <Button
               className="rounded-full bg-blue-600 px-6 py-6 text-white hover:bg-blue-700"
               onClick={() => {
-                // hook up your actual start logic here
-                // for now we can keep users on this page
+                // Here you can implement the actual interview start logic
+                // The jobRole variable contains the user's input (e.g., "Business Analyst")
+                console.log("Starting interview for job role:", jobRole);
+                
+                // You can add your interview logic here, such as:
+                // - Starting video/audio recording
+                // - Connecting to AI service
+                // - Navigating to interview questions
+                // - Sending job role to backend
+                
+                // For now, we'll just show an alert to demonstrate the functionality
+                alert(`Starting interview for: ${jobRole}`);
               }}
             >
               Start

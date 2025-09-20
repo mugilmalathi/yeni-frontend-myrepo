@@ -30,6 +30,7 @@ import SettingsPage from "@/pages/studentDashboard/Settings";
 import HelpCenter from "@/pages/studentDashboard/HelpCenter";
 import LogoutPage from "@/pages/studentDashboard/Logout";
 import AIInterface from "@/pages/evaluation/AIInterface";
+import AIInterview from "@/pages/evaluation/AIInterview";
 import UpskillingAI from "@/pages/upskillingExperience/UpskillingAI";
 import { cookieStore, AUTH_TOKEN_KEY } from "@/lib/utils";
 
@@ -168,6 +169,11 @@ export default function AppRouter() {
               </div>
             </div>
           }
+        />
+
+        <Route
+          path="/evaluation/:jobId/interview"
+          element={<AIInterview />}
         />
         <Route
           path="/upskilling-experience/:skillId"

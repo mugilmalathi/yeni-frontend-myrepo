@@ -1,11 +1,30 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Evaluation() {
   
   const navigate = useNavigate();
   const { jobId = "1" } = useParams();
+  const [jobRole, setJobRole] = useState("");
+
+  // Auto-navigate when job role is entered (like the HTML page)
+  useEffect(() => {
+    if (jobRole.trim() && jobRole.length > 2) {
+      const timer = setTimeout(() => {
+        navigate(`/evaluation/${jobId}/interview`, { 
+          state: { 
+            jobRole: jobRole.trim(),
+            company: "Generic" // You can make this dynamic based on jobId
+          } 
+        });
+      }, 1000); // 1 second delay to allow user to see the input
+
+      return () => clearTimeout(timer);
+    }
+  }, [jobRole, navigate, jobId]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -67,14 +86,44 @@ export default function Evaluation() {
         </div>
       </div>
 
+      {/* Job Role Input Section */}
+      <div className="space-y-6">
+        <h2 className="text-lg font-semibold text-blue-600">Enter Job Role:</h2>
+        <div className="max-w-md">
+          <Input
+            type="text"
+            placeholder="e.g. Business Analyst"
+            value={jobRole}
+            onChange={(e) => setJobRole(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
       {/* Start Evaluation Button */}
       <div className="pt-4">
         <Button 
           className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-base font-medium"
-          onClick={() => navigate(`/evaluation/${jobId}/ai`)}
+          onClick={() => {
+            if (jobRole.trim()) {
+              // Navigate immediately to AI Interview
+              navigate(`/evaluation/${jobId}/interview`, { 
+                state: { 
+                  jobRole: jobRole.trim(),
+                  company: "Generic"
+                } 
+              });
+            }
+          }}
+          disabled={!jobRole.trim()}
           >
-          Start Evaluation
+          Start Interview
         </Button>
+        {jobRole.trim() && (
+          <p className="text-sm text-gray-500 mt-2">
+            Auto-navigating in a moment, or click "Start Interview" to go immediately
+          </p>
+        )}
       </div>
     </div>
   );
