@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, Linkedin, Facebook } from "lucide-react";
 import HttpClient from "@/utils/httpClient";
+import {cookieStore, REGISTRATION_ID_KEY} from "@/lib/utils.ts";
 
 export default function ResumeBuilder() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function ResumeBuilder() {
 
     setIsLoading(true);
     try {
-      const registrationId = localStorage.getItem("studentRegistrationId");
+      const registrationId = cookieStore.get(REGISTRATION_ID_KEY);
       if (!registrationId) {
         throw new Error('Registration ID not found. Please start over.');
       }
